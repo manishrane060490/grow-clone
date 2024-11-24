@@ -1,4 +1,4 @@
-name: Android Build
+name: React Native Android Build
 
 on:
   push:
@@ -10,19 +10,31 @@ on:
 
 jobs:
   build-android:
-    runs-on: ubuntu-latest  # Use an Ubuntu runner
+    runs-on: ubuntu-latest
 
     steps:
     # Checkout the repository
     - name: Checkout Code
       uses: actions/checkout@v3
 
-    # Set up JDK
+    # Set up Node.js
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'  # Replace with the Node.js version your project requires
+
+    # Install dependencies
+    - name: Install Dependencies
+      run: |
+        npm install
+        npx react-native doctor || true  # Ensures React Native environment is set up
+
+    # Set up Java JDK
     - name: Set up JDK
       uses: actions/setup-java@v3
       with:
-        distribution: 'zulu'  # Using Zulu JDK
-        java-version: '17'    # Java version required by your project
+        distribution: 'zulu'
+        java-version: '17'  # Replace with the Java version required by Android SDK
 
     # Cache Gradle dependencies
     - name: Cache Gradle Dependencies
@@ -35,11 +47,13 @@ jobs:
 
     # Build the Android app
     - name: Build APK
-      run: ./gradlew assembleDebug
+      run: |
+        cd android
+        ./gradlew assembleDebug  # Change to `assembleRelease` for release builds
 
-    # Upload the build artifact
+    # Upload the APK artifact
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v3
       with:
         name: debug-apk
-        path: app/build/outputs/apk/debug/app-debug.apk  # Path to your APK
+        path: android/app/build/outputs/apk/debug/app-debug.apk  # Path to the generated APK
