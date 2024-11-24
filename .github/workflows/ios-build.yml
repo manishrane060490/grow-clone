@@ -32,9 +32,4 @@ jobs:
     # Build iOS App
     - name: Build iOS App
       run: |
-        xcodebuild clean build \
-          -workspace ios/grow.xcworkspace \  # Replace with your workspace name
-          -scheme grow \              # Replace with your scheme name
-          -sdk iphonesimulator \               # Simulator build
-          -configuration Debug \
-          -derivedDataPath ios/build
+        xcodebuild clean build -workspace ios/grow.xcworkspace -scheme grow -sdk iphonesimulator -configuration Debug -derivedDataPath ios/build
