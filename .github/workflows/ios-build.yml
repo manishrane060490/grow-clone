@@ -1,0 +1,40 @@
+name: React Native iOS Build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-ios:
+    runs-on: macos-latest
+
+    steps:
+    # Checkout repository
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    # Set up Node.js
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20.10.0'
+
+    # Install Dependencies
+    - name: Install Dependencies
+      run: |
+        npm install
+        cd ios && pod install
+
+    # Build iOS App
+    - name: Build iOS App
+      run: |
+        xcodebuild clean build \
+          -workspace ios/grow.xcworkspace \  # Replace with your workspace name
+          -scheme grow \              # Replace with your scheme name
+          -sdk iphonesimulator \               # Simulator build
+          -configuration Debug \
+          -derivedDataPath ios/build
