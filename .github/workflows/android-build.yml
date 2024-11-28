@@ -49,7 +49,7 @@ jobs:
     - name: Build APK
       run: |
         cd android
-        ./gradlew assembleDebug  # Change to `assembleRelease` for release builds
+        ./gradlew assembleRelease  # Change to `assembleRelease` for release builds
 
     # Upload the APK artifact
     - name: Upload APK Artifact
